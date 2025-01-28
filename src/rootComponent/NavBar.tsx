@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/shadcn-component/mode-toggle";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -36,12 +36,12 @@ export default function NavBar() {
           {navItems.map((item, index) => (
             <div key={index} className="relative group">
               {!item.dropdown ? (
-                <Link
+                <NavLink
                   to={item.path}
                   className="text-zinc-700 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               ) : (
                 <div>
                   <button className="flex items-center gap-1 text-zinc-700 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all">
@@ -49,13 +49,13 @@ export default function NavBar() {
                   </button>
                   <div className="absolute border top-[14px] overflow-hidden left-0 hidden group-hover:block mt-2 bg-white dark:bg-zinc-800 shadow-lg rounded-md w-48">
                     {item.dropdown.map((subItem, subIndex) => (
-                      <Link
+                      <NavLink
                         key={subIndex}
                         to={subItem.path}
                         className="block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600"
                       >
                         {subItem.name}
-                      </Link>
+                      </NavLink>
                     ))}
                   </div>
                 </div>
