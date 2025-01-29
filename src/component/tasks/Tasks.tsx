@@ -23,8 +23,8 @@ export default function Tasks() {
         </div>
       </div>
       <div className="container px-2 mx-auto grid grid-cols-1 md:grid-cols-2 gap-3 py-4">
-        {tasks.map((task, idx) => (
-          <TaskCard key={idx} task={task} />
+        {[...tasks].reverse().map((task) => (
+          <TaskCard key={task.id} task={task} />
         ))}
       </div>
     </div>

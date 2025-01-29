@@ -39,12 +39,18 @@ import { cn } from "@/lib/utils";
 import { TaskInterface } from "@/interfaces/task-interface";
 import { useForm } from "react-hook-form";
 import { MdOutlineCancel } from "react-icons/md";
+import { useAppDispatch } from "@/redux/hook";
+import { addTask } from "@/redux/fetures/task/taskSlice";
 
 export default function AddTaskForm() {
+  const dispatch = useAppDispatch();
   const form = useForm<TaskInterface>();
 
   const onSubmit = (data: TaskInterface) => {
     console.log("New Task Data:", data);
+    dispatch(addTask(data));
+
+    form.reset();
   };
 
   return (
