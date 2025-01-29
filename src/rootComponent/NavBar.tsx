@@ -1,7 +1,7 @@
 import { ModeToggle } from "@/shadcn-component/mode-toggle";
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -19,8 +19,10 @@ const navItems = [
 ];
 
 export default function NavBar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <div className="w-full border-b bg-white dark:bg-zinc-900 shadow-md">
+    <div className="w-full border-b relative bg-white dark:bg-zinc-900 shadow-md">
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo */}
         <Link to={`/`}>
@@ -31,28 +33,28 @@ export default function NavBar() {
           />
         </Link>
 
-        {/* Nav Items */}
+        {/* Desktop Nav */}
         <nav className="hidden md:flex gap-8 items-center">
           {navItems.map((item, index) => (
             <div key={index} className="relative group">
               {!item.dropdown ? (
                 <NavLink
                   to={item.path}
-                  className="text-zinc-700 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
+                  className="text-zinc-700 dark:text-zinc-300 hover:text-gray-500 dark:hover:text-gray-400 transition-all"
                 >
                   {item.name}
                 </NavLink>
               ) : (
                 <div>
-                  <button className="flex items-center gap-1 text-zinc-700 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all">
+                  <button className="flex items-center gap-1 text-zinc-700 dark:text-zinc-300 hover:text-gray-500 dark:hover:text-gray-400 transition-all">
                     {item.name} <ChevronDown className="w-4 h-4" />
                   </button>
-                  <div className="absolute border top-[14px] overflow-hidden left-0 hidden group-hover:block mt-2 bg-white dark:bg-zinc-800 shadow-lg rounded-md w-48">
+                  <div className="absolute border top-[14px] left-0 hidden group-hover:block mt-2 bg-white dark:bg-zinc-800 shadow-lg rounded-md w-48">
                     {item.dropdown.map((subItem, subIndex) => (
                       <NavLink
                         key={subIndex}
                         to={subItem.path}
-                        className="block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600"
+                        className="block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-600"
                       >
                         {subItem.name}
                       </NavLink>
@@ -64,39 +66,28 @@ export default function NavBar() {
           ))}
         </nav>
 
-        {/* Mobile Menu */}
-        <div className="md:hidden">
-          <MobileMenu />
-        </div>
-
-        {/* Mode Toggle */}
-        <div>
+        {/* Right Side Icons */}
+        <div className="flex items-center gap-4">
           <ModeToggle />
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-zinc-700 dark:text-zinc-300 hover:text-gray-500 dark:hover:text-gray-400 transition-all"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
       </div>
-    </div>
-  );
-}
 
-function MobileMenu() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="text-zinc-700 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
-      >
-        <span className="material-icons">menu</span>
-      </button>
-      {isOpen && (
-        <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-900 shadow-md">
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="block md:hidden border bg-white dark:bg-zinc-900 shadow-md absolute w-full left-0 top-full p-4 z-50">
           {navItems.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="mb-2">
               {!item.dropdown ? (
                 <Link
                   to={item.path}
-                  className="block px-4 py-2 text-zinc-700 dark:text-zinc-300 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600"
+                  className="block px-4 py-2 text-zinc-700 dark:text-zinc-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-600"
+                  onClick={() => setMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
@@ -109,7 +100,8 @@ function MobileMenu() {
                     <Link
                       key={subIndex}
                       to={subItem.path}
-                      className="block px-4 py-2 pl-8 text-zinc-700 dark:text-zinc-300 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600"
+                      className="block px-4 py-2 pl-8 text-zinc-700 dark:text-zinc-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-600"
+                      onClick={() => setMenuOpen(false)}
                     >
                       {subItem.name}
                     </Link>

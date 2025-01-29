@@ -11,7 +11,7 @@ export default function Tasks() {
     <div>
       <div className="container mx-auto px-2 pt-3 ">
         <div
-          className="w-full border h-[100px] md:h-[200px] rounded-lg overflow-hidden flex flex-col gap-3 items-center justify-center 
+          className="w-full border h-[130px] md:h-[200px] rounded-lg overflow-hidden flex flex-col gap-3 items-center justify-center 
           bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 
           dark:from-gray-800 dark:via-gray-900 dark:to-gray-950 shadow-md"
         >
