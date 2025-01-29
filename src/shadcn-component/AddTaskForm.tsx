@@ -1,8 +1,17 @@
+import { useForm } from "react-hook-form";
+import { TaskInterface } from "@/interfaces/task-interface";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { MdOutlineCancel } from "react-icons/md";
+import { useAppDispatch } from "@/redux/hook";
+import { addTask } from "@/redux/fetures/task/taskSlice";
+
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -26,7 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverTrigger,
@@ -34,22 +42,20 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { TaskInterface } from "@/interfaces/task-interface";
-import { useForm } from "react-hook-form";
-import { MdOutlineCancel } from "react-icons/md";
-import { useAppDispatch } from "@/redux/hook";
-import { addTask } from "@/redux/fetures/task/taskSlice";
 
 export default function AddTaskForm() {
   const dispatch = useAppDispatch();
-  const form = useForm<TaskInterface>();
+  const form = useForm<TaskInterface>({
+    defaultValues: {
+      title: "",
+      description: "",
+      dueDate: undefined,
+      priority: undefined,
+    },
+  });
 
   const onSubmit = (data: TaskInterface) => {
-    console.log("New Task Data:", data);
     dispatch(addTask(data));
-
     form.reset();
   };
 
@@ -66,15 +72,18 @@ export default function AddTaskForm() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Add a New Task</AlertDialogTitle>
+          <AlertDialogDescription className="sr-only">
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="absolute top-3  right-3">
+        <AlertDialogFooter className="absolute top-3 right-3">
           <AlertDialogCancel>
             <MdOutlineCancel className="text-red-500" />
           </AlertDialogCancel>
         </AlertDialogFooter>
 
-        {/* Form */}
         <Form {...form}>
           <form
             id="task-form"
@@ -85,6 +94,7 @@ export default function AddTaskForm() {
             <FormField
               control={form.control}
               name="title"
+              rules={{ required: "Title is required" }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
@@ -100,6 +110,7 @@ export default function AddTaskForm() {
             <FormField
               control={form.control}
               name="description"
+              rules={{ required: "Description is required" }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -116,6 +127,7 @@ export default function AddTaskForm() {
               <FormField
                 control={form.control}
                 name="dueDate"
+                rules={{ required: "Due date is required" }}
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel className="mb-2">Due Date</FormLabel>
@@ -130,7 +142,7 @@ export default function AddTaskForm() {
                             )}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              format(new Date(field.value), "PPP")
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -144,10 +156,9 @@ export default function AddTaskForm() {
                           selected={
                             field.value ? new Date(field.value) : undefined
                           }
-                          onSelect={field.onChange}
-                          // disabled={(date) =>
-                          //   date < new Date("1900-01-01") || date > new Date()
-                          // }
+                          onSelect={(date) =>
+                            field.onChange(date?.toISOString())
+                          }
                           initialFocus
                         />
                       </PopoverContent>
@@ -161,6 +172,7 @@ export default function AddTaskForm() {
               <FormField
                 control={form.control}
                 name="priority"
+                rules={{ required: "Priority is required" }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Priority</FormLabel>
@@ -185,29 +197,9 @@ export default function AddTaskForm() {
               />
             </div>
 
-            {/* Is Completed Field */}
-            {/* <FormField
-              control={form.control}
-              name="isCompleted"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Mark as Completed</FormLabel>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
-            {/* Dialog Footer */}
+            {/* Submit Button */}
             <AlertDialogFooter>
-              {/* <AlertDialogCancel>Cancel</AlertDialogCancel> */}
               <AlertDialogAction asChild>
-                {/* Submit Button */}
                 <Button type="submit" className="w-full">
                   Submit
                 </Button>
