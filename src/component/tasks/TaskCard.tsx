@@ -1,5 +1,8 @@
+import { Checkbox } from "@/components/ui/checkbox";
 import { TaskInterface } from "@/interfaces/task-interface";
 import { cn } from "@/lib/utils";
+import { toggleTasksCompleted } from "@/redux/fetures/task/taskSlice";
+import { useAppDispatch } from "@/redux/hook";
 import { FaTrash, FaCheckCircle } from "react-icons/fa";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 
@@ -8,6 +11,7 @@ interface PropsInterface {
 }
 
 export default function TaskCard({ task }: PropsInterface) {
+  const dispatch = useAppDispatch();
   return (
     <div
       className={cn(
@@ -43,7 +47,7 @@ export default function TaskCard({ task }: PropsInterface) {
       </div>
       <div className="flex items-center space-x-4">
         {/* Checkbox to mark as complete */}
-        <input type="checkbox" className="cursor-pointer" />
+        <Checkbox onClick={() => dispatch(toggleTasksCompleted(task.id))} />
         {/* Delete Button */}
         <button className="text-red-600 dark:text-red-400 hover:text-red-800 transition-colors duration-200">
           <FaTrash />
