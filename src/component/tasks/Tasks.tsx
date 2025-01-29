@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/redux/hook";
 import TaskCard from "./TaskCard";
 import { selectTasks } from "@/redux/fetures/task/taskSlice";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import AddTaskForm from "@/shadcn-component/AddTaskForm";
 
 export default function Tasks() {
@@ -19,12 +19,7 @@ export default function Tasks() {
             Manage Your Tasks Efficiently
           </h1>
 
-          <Button
-            variant="outline"
-            className="bg-transparent px-6 border border-gray-800 dark:border-gray-300"
-          >
-            <AddTaskForm />
-          </Button>
+          <AddTaskForm />
         </div>
       </div>
       <div className="container px-2 mx-auto grid grid-cols-1 md:grid-cols-2 gap-3 py-4">
