@@ -1,7 +1,7 @@
 import {
   AlertDialog,
   AlertDialogAction,
-  // AlertDialogCancel,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
@@ -38,6 +38,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { TaskInterface } from "@/interfaces/task-interface";
 import { useForm } from "react-hook-form";
+import { MdOutlineCancel } from "react-icons/md";
 
 export default function AddTaskForm() {
   const form = useForm<TaskInterface>();
@@ -60,6 +61,12 @@ export default function AddTaskForm() {
         <AlertDialogHeader>
           <AlertDialogTitle>Add a New Task</AlertDialogTitle>
         </AlertDialogHeader>
+
+        <AlertDialogFooter className="absolute top-3  right-3">
+          <AlertDialogCancel>
+            <MdOutlineCancel className="text-red-500" />
+          </AlertDialogCancel>
+        </AlertDialogFooter>
 
         {/* Form */}
         <Form {...form}>
