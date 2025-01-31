@@ -67,7 +67,10 @@ export default function EditTaskForm({ EditTaskData }: EditTaskFormProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" className="bg-transparent">
+        <Button
+          variant="outline"
+          className="bg-transparent !border-none !shadow-none"
+        >
           <CiEdit />
         </Button>
       </AlertDialogTrigger>
