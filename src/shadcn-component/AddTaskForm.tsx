@@ -197,13 +197,13 @@ export default function AddTaskForm() {
               />
             </div>
 
+            <Button type="submit" className="w-full">
+              Submit
+            </Button>
+
             {/* Submit Button */}
             <AlertDialogFooter>
-              <AlertDialogAction asChild>
-                <Button type="submit" className="w-full">
-                  Submit
-                </Button>
-              </AlertDialogAction>
+              <AlertDialogAction asChild></AlertDialogAction>
             </AlertDialogFooter>
           </form>
         </Form>

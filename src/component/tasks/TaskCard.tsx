@@ -18,7 +18,7 @@ export default function TaskCard({ task }: PropsInterface) {
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row items-start md:items-center justify-between p-4 border rounded-lg shadow-md transition-all duration-200 hover:shadow-lg",
+        "flex flex-col cursor-pointer md:flex-row items-start md:items-center justify-between p-4 border rounded-lg shadow-md transition-all duration-200 hover:shadow-lg",
         {
           "bg-green-50 dark:bg-green-950": task.priority === "low",
           "bg-yellow-50 dark:bg-yellow-950": task.priority === "medium",
