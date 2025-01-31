@@ -4,18 +4,15 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { MdOutlineCancel } from "react-icons/md";
 import { useAppDispatch } from "@/redux/hook";
-import { addTask } from "@/redux/fetures/task/taskSlice";
-
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
+  AlertDialogTrigger,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,41 +40,45 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { CiEdit } from "react-icons/ci";
+import { editTask } from "@/redux/fetures/task/taskSlice";
 
-export default function EditTaskForm() {
+interface EditTaskFormProps {
+  EditTaskData: TaskInterface;
+}
+
+export default function EditTaskForm({ EditTaskData }: EditTaskFormProps) {
   const dispatch = useAppDispatch();
   const form = useForm<TaskInterface>({
     defaultValues: {
-      title: "",
-      description: "",
-      dueDate: undefined,
-      priority: undefined,
+      title: EditTaskData.title,
+      description: EditTaskData.description,
+      dueDate: EditTaskData.dueDate,
+      priority: EditTaskData.priority,
     },
   });
 
-  const onSubmit = (data: TaskInterface) => {
-    dispatch(addTask(data));
+  const onSubmit = (
+    data: Pick<TaskInterface, "title" | "description" | "dueDate" | "priority">
+  ) => {
+    dispatch(editTask({ id: EditTaskData.id, ...data }));
     form.reset();
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="bg-transparent border-none dark:border-gray-300"
-        >
+        <Button variant="outline" className="bg-transparent">
           <CiEdit />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Edit Your Task</AlertDialogTitle>
-          <AlertDialogDescription className="sr-only">
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
         </AlertDialogHeader>
+        <AlertDialogDescription className="sr-only">
+          This action cannot be undone. This will permanently delete your
+          account and remove your data from our servers.
+        </AlertDialogDescription>
 
         <AlertDialogFooter className="absolute top-3 right-3">
           <AlertDialogCancel>
@@ -86,16 +87,11 @@ export default function EditTaskForm() {
         </AlertDialogFooter>
 
         <Form {...form}>
-          <form
-            id="task-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Title Field */}
             <FormField
               control={form.control}
               name="title"
-              rules={{ required: "Title is required" }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
@@ -111,7 +107,6 @@ export default function EditTaskForm() {
             <FormField
               control={form.control}
               name="description"
-              rules={{ required: "Description is required" }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -123,22 +118,21 @@ export default function EditTaskForm() {
               )}
             />
 
-            <div className="grid grid-cols-2 justify-center items-center gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {/* Due Date Field */}
               <FormField
                 control={form.control}
                 name="dueDate"
-                rules={{ required: "Due date is required" }}
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="mb-2">Due Date</FormLabel>
+                  <FormItem>
+                    <FormLabel>Due Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full pl-3 text-left font-normal",
+                              "w-full pl-3 text-left",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -151,7 +145,7 @@ export default function EditTaskForm() {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
                           selected={
@@ -160,7 +154,6 @@ export default function EditTaskForm() {
                           onSelect={(date) =>
                             field.onChange(date?.toISOString())
                           }
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
@@ -173,7 +166,6 @@ export default function EditTaskForm() {
               <FormField
                 control={form.control}
                 name="priority"
-                rules={{ required: "Priority is required" }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Priority</FormLabel>
@@ -199,13 +191,8 @@ export default function EditTaskForm() {
             </div>
 
             <Button type="submit" className="w-full">
-              Submit
+              Save Changes
             </Button>
-
-            {/* Submit Button */}
-            <AlertDialogFooter>
-              <AlertDialogAction asChild></AlertDialogAction>
-            </AlertDialogFooter>
           </form>
         </Form>
       </AlertDialogContent>

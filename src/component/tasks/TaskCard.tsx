@@ -51,7 +51,7 @@ export default function TaskCard({ task }: PropsInterface) {
       </div>
       <div className="flex  items-center ">
         {/* Checkbox to mark as complete */}
-        <EditTaskForm />
+        <EditTaskForm EditTaskData={task} />
         {/* Delete Button */}
         <button
           onClick={() => dispatch(deleteTask(task.id))}
