@@ -6,8 +6,8 @@ import {
   toggleTasksCompleted,
 } from "@/redux/fetures/task/taskSlice";
 import { useAppDispatch } from "@/redux/hook";
-import { FaTrash, FaCheckCircle } from "react-icons/fa";
-import { MdRadioButtonUnchecked } from "react-icons/md";
+import EditTaskForm from "@/shadcn-component/EditTaskForm";
+import { FaTrash } from "react-icons/fa";
 
 interface PropsInterface {
   task: TaskInterface;
@@ -30,11 +30,12 @@ export default function TaskCard({ task }: PropsInterface) {
         <div className="flex items-center space-x-4">
           {/* Icon */}
           <div className="text-2xl text-gray-600 dark:text-gray-300">
-            {task.isCompleted ? (
-              <FaCheckCircle className="text-green-600" />
-            ) : (
-              <MdRadioButtonUnchecked />
-            )}
+            <Checkbox
+              className={cn("rounded-full text-xl ", {
+                "bg-green-600": task.isCompleted === true,
+              })}
+              onClick={() => dispatch(toggleTasksCompleted(task.id))}
+            />
           </div>
           {/* Title */}
           <div className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -48,9 +49,9 @@ export default function TaskCard({ task }: PropsInterface) {
           </div>
         </div>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex  items-center ">
         {/* Checkbox to mark as complete */}
-        <Checkbox onClick={() => dispatch(toggleTasksCompleted(task.id))} />
+        <EditTaskForm />
         {/* Delete Button */}
         <button
           onClick={() => dispatch(deleteTask(task.id))}
